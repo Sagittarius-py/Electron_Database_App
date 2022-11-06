@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Database_App</title>
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="script-src 'self' 'unsafe-inline';"
+    />
+    <link rel="stylesheet" href="./style/style.css" />
+  </head>
+  <body>
+    <header>awd</header>
+    <div id="root">
+      <div id="user-section">
+        <div id="table-select">
+          <label for="tables">Choose a table:</label>
+          <select name="tables" id="tables">
+            <option value="frameworks">frameworks</option>
+            <option value="technologies">technologies</option>
+          </select>
+        </div>
+
+        <div id="table-write">
+          <h3>Add record to currently selected table</h3>
+          <label for="name-input">Record Name</label>
+          <input type="text" id="name-input" name="name-input" /><br />
+          <button id="form-submit">Submit</button>
+        </div>
+      </div>
+      <div id="table-section-container">
+        <div id="table-section"></div>
+      </div>
+    </div>
+  </body>
+  <script src="index.js"></script>
+</html>

@@ -1,0 +1,24 @@
+{
+ "elements": [
+  {
+   "id": 1,
+   "name": "frontend"
+  },
+  {
+   "id": 2,
+   "name": "backend"
+  },
+  {
+   "id": 3,
+   "name": "development"
+  },
+  {
+   "id": 4,
+   "name": "desktop"
+  },
+  {
+   "id": 5,
+   "name": "awdg"
+  }
+ ]
+}
