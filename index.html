@@ -10,7 +10,11 @@
     <link rel="stylesheet" href="./style/style.css" />
   </head>
   <body>
-    <header>awd</header>
+    <header>
+      <div id="header">
+        <h1>Filip Sieniawski Database App</h1>
+      </div>
+    </header>
     <div id="root">
       <div id="user-section">
         <div id="table-select">
@@ -22,10 +26,32 @@
         </div>
 
         <div id="table-write">
-          <h3>Add record to currently selected table</h3>
+          <h4>Add record to currently selected table:</h4>
           <label for="name-input">Record Name</label>
           <input type="text" id="name-input" name="name-input" /><br />
+          <label for="about-input">Record About</label>
+          <input type="text" id="about-input" name="about-input" /><br />
+          <label for="number-input">Record Number</label>
+          <input type="number" id="number-input" name="number-input" /><br />
+          <label for="number2-input">Record 2 Number</label>
+          <input type="number" id="number2-input" name="number2-input" /><br />
+          <label for="bool1-input">Record Bool1</label>
+          <input type="checkbox" id="bool1-input" name="bool1-input" /><br />
+          <label for="bool2-input">Record Bool2</label>
+          <input type="checkbox" id="bool2-input" name="bool2-input" /><br />
+          <label for="date-input">Record Date</label>
+          <input type="date" id="date-input" name="date-input" /><br />
           <button id="form-submit">Submit</button>
+          <button id="random-data-submit">Random Data</button>
+        </div>
+        <div id="filter">
+          <h4>Choose column to filter by</h4>
+          <select name="filter-select" id="filter-select">
+            <option value="null"></option>
+          </select>
+          <label for="filter-value">Filter Value</label>
+          <input type="text" name="filter-value" id="filter-value" />
+          <button id="filter-submit">Filter</button>
         </div>
       </div>
       <div id="table-section-container">

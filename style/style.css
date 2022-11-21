@@ -1,30 +1,47 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,900;1,300&family=Roboto:wght@900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
 
-*{
-    color: rgb(237, 237, 251);
-}
+/* width */
+::-webkit-scrollbar {
+    width: 10px;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: none;
+  }
+  
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #7033ff;
+    border-radius: 5px;
+    height: 10px;
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #4f23b6;
+  }
+
+
+
 
 body{
-    font-family: 'Montserrat', sans-serif;
     font-family: 'Roboto', sans-serif;
 
     margin: 0;
     padding: 0;
 
     overflow: hidden;
-    /* background-color: rgb(76, 76, 101); */
 }
 
-button, input, select, option{
-    background-color: rgb(76, 76, 101);
-}
-
-select{
-    width: 100px;
-    height: 30px;
+*:focus{
     border: none;
-    border-radius: 5px;
-    
+    outline: none;
+}
+
+h1{
+    position: absolute;
+    margin-left: 30px;
 }
 
 #root{
@@ -42,6 +59,18 @@ header{
     width: 100%;
     height: 10vh;
     position: absolute;
+    background-color: #7033ff;
+}
+#header{
+    width: 100%;
+    height: 100%;
+    background-color: white;
+    border-radius:  0 0 0 5vh;
+}
+
+label, h{
+    color: rgb(237, 237, 251);
+
 }
 #user-section{
     padding: 10px;
@@ -54,10 +83,37 @@ header{
     
 }
 
+input, select{
+    width: 90%;
+    height: 30px;
+    border-radius: 10px;
+    border: none;
+    margin: 5px;
+    color: black
+    
+}
+
+#form-submit, #random-data-submit{
+    margin-top: 10px;
+    width: 72px;
+    height: 30px;
+    border-radius: 10px;
+    border: none;
+    transition: 0.2s;
+}
+#form-submit:hover, #random-data-submit:hover{
+    cursor: pointer;
+    color: rgba(112, 51, 255, 1);
+}
+#form-submit:active, #random-data-submit:active{
+    color: rgba(112, 51, 255, 1);
+    background-color:rgb(227, 227, 241);
+    transition: 0.2s;
+  }
 
 #table-section-container{
     width: 90vw;
-    height: 90vw;
+    height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -71,48 +127,66 @@ header{
     flex-flow: column;
     z-index: 10;
     overflow-y: auto;
-    padding: 20px;
+    padding: 10px;
     background-color: #F6F5FA;
 
 }
 
 
-.cell-row{
+.cell-row, .cell-label-row{
     /* width:90%; */
-    height:52px;
+    height:54px;
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
     margin-top: 1px;
-    background-color: rgba(36, 36, 36, 0.3);
+    /* background-color: #F5F4F9; */
     border-radius: 15px;
+    border: 2px solid rgba(0,0,0,0.5);
 
 }
 
-.cell{
+.cell-label-row{
+    border-radius: 0;
+    background: none;
+}
+
+.cell, .cell-label{
     min-width: 50px;
     height: 50px;
     border-radius: 15px;
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 0 0 0 10px ;
-    background-color: #3C3463;
-
+    margin: 2px;
+    background-color: #4c3d96;
+    color: rgb(237, 237, 251);
 }
+.cell-label{
+    border-radius: 0;
+}
+
 
 .cell-name{
     width: 200px;
     padding-right: 10px;
     padding-left: 10px;
     overflow: auto;
-
 }
 
+.cell-number{
+    width: 150px;
+
+}
+.cell-date{
+    width: 150px;
+
+}
 .delete-record{
     float: right;
     right: 0px;
-    position: relative;
     cursor: pointer;
     border: none;
+    margin-left: auto;
 }
+
