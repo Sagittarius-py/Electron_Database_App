@@ -32,6 +32,7 @@ body{
     padding: 0;
 
     overflow: hidden;
+    overflow-y: auto;
 }
 
 *:focus{
@@ -68,7 +69,7 @@ header{
     border-radius:  0 0 0 5vh;
 }
 
-label, h{
+label{
     color: rgb(237, 237, 251);
 
 }
@@ -80,7 +81,7 @@ label, h{
 
     z-index: 5;
     border-radius: 0 20px 20px 0;
-    
+    overflow: auto;
 }
 
 input, select{
@@ -93,7 +94,7 @@ input, select{
     
 }
 
-#form-submit, #random-data-submit{
+#form-submit, #random-data-submit, #filter-submit, #clear-filter {
     margin-top: 10px;
     width: 72px;
     height: 30px;

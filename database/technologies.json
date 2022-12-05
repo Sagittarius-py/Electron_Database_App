@@ -1,9 +1,40 @@
 {
-  "columns": [
-    "id",
-    "Name",
-    "Number",
-    "Date"
-  ],
-  "elements": []
+ "columns": [
+  "id",
+  "Name",
+  "Number",
+  "Date"
+ ],
+ "elements": [
+  {
+   "id": 0,
+   "name": "9l2a2ba3oe",
+   "about": "ctr1",
+   "number": 694737,
+   "number2": 48,
+   "bool1": false,
+   "bool2": false,
+   "date": "2022-09-23"
+  },
+  {
+   "id": 1,
+   "name": "kk4tx9290p",
+   "about": "e927",
+   "number": 569482,
+   "number2": 88,
+   "bool1": true,
+   "bool2": false,
+   "date": "2022-11-09"
+  },
+  {
+   "id": 2,
+   "name": "1t3x8nwfyk",
+   "about": "5xv9h",
+   "number": 691894,
+   "number2": 82,
+   "bool1": false,
+   "bool2": false,
+   "date": "2022-10-28"
+  }
+ ]
 }

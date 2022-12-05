@@ -1,8 +1,47 @@
 const { readFile, writeFile, deleteFromFile } = require("./logic/fileHandle");
 
+// Event listener to random data creation
+
 document
   .getElementById("random-data-submit")
   .addEventListener("click", randomData);
+
+document
+  .getElementById("random-data-multiple-submit")
+  .addEventListener("click", randomDataMultiple);
+
+function search(records) {
+  let searchColumn = document.getElementById("search-select").value;
+  let searchValue = document.getElementById("search-value").value;
+
+  function binarySearch(records, searchValue) {
+    records.sort(dynamicSort(searchColumn));
+    var mid = Math.floor(records.length / 2);
+
+    if (records[mid][searchColumn] == searchValue) {
+      console.log("jest");
+      let x = JSON.parse(JSON.stringify(records[mid]));
+
+      console.log("xxx", x);
+      return x;
+    } else if (
+      records[mid][searchColumn] < searchValue &&
+      records.length > searchValue
+    ) {
+      return binarySearch(records.splice(mid, records.length), searchValue);
+    } else if (records[mid][searchColumn] > searchValue && records.length > 1) {
+      return binarySearch(records.splice(0, mid), searchValue);
+    } else {
+      return -1;
+    }
+  }
+  let resut = binarySearch(records, searchValue);
+  console.log(resut, "cok");
+
+  return resut;
+}
+
+//! Function generating random data
 
 function randomData() {
   let tableName = document.getElementById("tables").value;
@@ -16,16 +55,45 @@ function randomData() {
     .toISOString()
     .split("T")[0];
 
-  console.log(name, about, number, number2, bool1, bool2, date);
-
+  // Writing generated data to file
   writeToTable(tableName, name, about, number, number2, bool1, bool2, date);
+
+  // Refreshing table with new data
   generateTable(tableName);
 }
 
+//! function to generate multiple random records
+function randomDataMultiple() {
+  let amount = document.getElementById("random-amount").value;
+
+  for (let y = 0; y < amount; y++) {
+    let tableName = document.getElementById("tables").value;
+    let name = (Math.random() + 1).toString(36).substring(2);
+    let about = (Math.random() + 1).toString(36).substring(8);
+    let number = Math.floor(Math.random() * 1000000);
+    let number2 = Math.floor(Math.random() * 100);
+    let bool1 = Boolean(Math.round(Math.random()));
+    let bool2 = Boolean(Math.round(Math.random()));
+    let date = new Date(+new Date() - Math.floor(Math.random() * 10000000000))
+      .toISOString()
+      .split("T")[0];
+
+    // Writing generated data to file
+    writeToTable(tableName, name, about, number, number2, bool1, bool2, date);
+  }
+  let tableName = document.getElementById("tables").value;
+  generateTable(tableName);
+}
+
+//! Function to filter data by column
 function filter(records) {
+  // reading chosen column
   let filterColumn = document.getElementById("filter-select").value;
+  let filterColumn2 = document.getElementById("filter-select2").value;
+  // reading value to sort with
   let filterValue = document.getElementById("filter-value").value;
-  console.log(filterColumn);
+  let filterValue2 = document.getElementById("filter-value2").value;
+
   if (filterColumn == "bool1" || filterColumn == "bool2") {
     if (filterValue == "true") {
       filterValue = 1;
@@ -34,47 +102,112 @@ function filter(records) {
     }
   }
 
-  console.log(records);
+  if (filterColumn2 == "bool1" || filterColumn2 == "bool2") {
+    if (filterValue2 == "true") {
+      filterValue2 = 1;
+    } else {
+      filterValue2 = 0;
+    }
+  }
+
+  // Creating new list with filtered records
   let filtered = [];
   records?.map((record) => {
-    if (record[filterColumn] == filterValue) {
-      console.log(record[filterColumn] == filterValue);
-      filtered.push(record);
+    console.log(record[filterColumn2] == filterValue2);
+
+    record[filterColumn2] == filterValue2;
+    if (filterColumn2 == "null") {
+      if (record[filterColumn] == filterValue) {
+        filtered.push(record);
+      }
+    } else {
+      if (
+        record[filterColumn] == filterValue &&
+        record[filterColumn2] == filterValue2
+      ) {
+        console.log("cok");
+        filtered.push(record);
+      }
     }
   });
 
+  // Returning filtered list
   return filtered;
 }
 
+//! Rendering new table by reading file data
+// Everything is made dynamically by reading
 let generateTable = (tableName) => {
+  // getting data from file
   const object = readFile(tableName);
 
+  // Getting list select form file
   let filterOptions = document.getElementById("filter-select");
+  let filterOptions2 = document.getElementById("filter-select2");
+  let searchSelect = document.getElementById("search-select");
 
+  // getting column list object from file
   let columnsArray = object.columns;
+
+  // adding possible filter columns to document
   filterOptions.innerHTML = '<option value="null"></option>';
   columnsArray.forEach((element) => {
     filterOptions.innerHTML += `<option value="${element}">${element}</option>`;
   });
+  filterOptions2.innerHTML = '<option value="null"></option>';
+  columnsArray.forEach((element) => {
+    filterOptions2.innerHTML += `<option value="${element}">${element}</option>`;
+  });
 
+  searchSelect.innerHTML = '<option value="null"></option>';
+  columnsArray.forEach((element) => {
+    searchSelect.innerHTML += `<option value="${element}">${element}</option>`;
+  });
+
+  // reading records from object got from file
   let records = object.elements;
+
+  // adding event listener to filter button
   document.getElementById("filter-submit").addEventListener("click", () => {
     filteredRecords = filter(records);
     generateRecords(filteredRecords);
   });
+
+  document.getElementById("search-submit").addEventListener("click", () => {
+    searchedRecords = search(records);
+    generateRecords(searchedRecords);
+  });
+
+  // adding event listener to button for filtration clearing
+  document.getElementById("clear-filter").addEventListener("click", () => {
+    generateRecords(records);
+  });
+
+  // running function to generate fresh table
   generateRecords(records);
+
+  // adding listeners to add delete buttons
   deleteButtonHandle();
 };
 
 let generateRecords = (records) => {
+  // getting table section div from document
   var tableSection = document.getElementById("table-section");
+  // clearing table section from any inner html for empty space to add new records
   tableSection.innerHTML = "";
 
+  console.log(records);
+
+  // if records table 
+  // sorting file records by ID
   records.sort(dynamicSort("id"));
+
+  // running function for every element in records by by "MAP"
   records.map((element) => {
     const rowKeys = Object.keys(element);
     const rowRecords = Object.values(element);
 
+    // checking if every column exists and adding record to table by automatically generate every field
     tableSection.innerHTML +=
       `<div class="cell-row">` +
       (rowKeys[0]
@@ -114,6 +247,8 @@ let generateRecords = (records) => {
   });
 };
 
+//! Function to create new record
+
 let writeToTable = (
   tableName,
   name,
@@ -124,19 +259,18 @@ let writeToTable = (
   bool2,
   date
 ) => {
+  // reading previous file data
   const object = readFile(tableName).elements;
 
+  // creating id for new record
   let id = 0;
   for (let j = 1; j <= object.length; j++) {
     var item = object.find((item) => item.id === j);
     if (item == undefined) id = j;
   }
-  console.log("cokolwiek");
-  // if (number < 0 || number2 < 0) {
-  //   return;
-  // }
 
-  if (name != "") {
+  // checking if name is'nt null, if not creating object with given data
+  if (name != "" && number >= 0) {
     let readyData = {
       id: id,
       name: name,
@@ -147,11 +281,15 @@ let writeToTable = (
       bool2: bool2,
       date: date,
     };
+
+    // Saving new record to file
     writeFile(tableName, readyData);
   }
 };
 
+//! Creating new record by manually writing data
 let addContent = () => {
+  // getting all written data after clicking "SUBMIT" button
   document.getElementById("form-submit").addEventListener("click", () => {
     let tableName = document.getElementById("tables").value;
     let name = document.getElementById("name-input").value;
@@ -162,9 +300,13 @@ let addContent = () => {
     let bool2 = document.getElementById("bool2-input").checked;
     let date = document.getElementById("date-input").value;
 
+    // Running write to table button
     writeToTable(tableName, name, about, number, number2, bool1, bool2, date);
 
+    // Clearing table section
     document.getElementById("table-section").innerHTML = "";
+
+    // generating refreshed table with new data
     generateTable(tableName);
   });
 };
