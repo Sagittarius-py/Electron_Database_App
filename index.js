@@ -10,41 +10,65 @@ document
   .getElementById("random-data-multiple-submit")
   .addEventListener("click", randomDataMultiple);
 
-function search(records) {
+document.getElementById("filter-submit").addEventListener("click", () => {
+  filteredRecords = filter(records);
+  generateRecords(filteredRecords);
+});
+
+document.getElementById("clear-filter").addEventListener("click", () => {
+  const object = readFile(tableName);
+  let records = object.elements;
+  generateRecords(records);
+});
+
+function search(recordsData) {
   let searchColumn = document.getElementById("search-select").value;
   let searchValue = document.getElementById("search-value").value;
+  let table = [];
 
-  function binarySearch(records, searchValue) {
-    records.sort(dynamicSort(searchColumn));
-    var mid = Math.floor(records.length / 2);
+  function binarySearch(data, searchValue) {
+    data.sort(dynamicSort(searchColumn));
+    var mid = Math.floor(data.length / 2);
 
-    if (records[mid][searchColumn] == searchValue) {
-      console.log("jest");
-      let x = JSON.parse(JSON.stringify(records[mid]));
-
-      console.log("xxx", x);
+    if (data[mid][searchColumn] == searchValue) {
+      let x = data[mid];
       return x;
     } else if (
-      records[mid][searchColumn] < searchValue &&
-      records.length > searchValue
+      data[mid][searchColumn] < searchValue &&
+      data.length > searchValue
     ) {
-      return binarySearch(records.splice(mid, records.length), searchValue);
-    } else if (records[mid][searchColumn] > searchValue && records.length > 1) {
-      return binarySearch(records.splice(0, mid), searchValue);
+      return binarySearch(data.splice(mid, data.length), searchValue);
+    } else if (data[mid][searchColumn] > searchValue && data.length > 1) {
+      return binarySearch(data.splice(0, mid), searchValue);
     } else {
       return -1;
     }
   }
-  let resut = binarySearch(records, searchValue);
-  console.log(resut, "cok");
 
-  return resut;
+  // //* binary search to lesser equal
+  let result = binarySearch(recordsData, searchValue);
+
+  // //* binary search to lesser lesser
+  // while (searchValue >= 0) {
+  //   console.log(recordsData, searchValue);
+  //   let record = binarySearch(recordsData, searchValue);
+  //   if (record != -1) {
+  //     table.push(record);
+  //   }
+  //   searchValue--;
+  // }
+  // if (table.length > 0) {
+  //   result = table;
+  // }
+  // console.log("bez", result);
+
+  return result;
 }
 
 //! Function generating random data
 
 function randomData() {
-  let tableName = document.getElementById("tables").value;
+  let tableName = "frameworks";
   let name = (Math.random() + 1).toString(36).substring(2);
   let about = (Math.random() + 1).toString(36).substring(8);
   let number = Math.floor(Math.random() * 1000000);
@@ -65,9 +89,9 @@ function randomData() {
 //! function to generate multiple random records
 function randomDataMultiple() {
   let amount = document.getElementById("random-amount").value;
+  let tableName = "frameworks";
 
   for (let y = 0; y < amount; y++) {
-    let tableName = document.getElementById("tables").value;
     let name = (Math.random() + 1).toString(36).substring(2);
     let about = (Math.random() + 1).toString(36).substring(8);
     let number = Math.floor(Math.random() * 1000000);
@@ -81,7 +105,6 @@ function randomDataMultiple() {
     // Writing generated data to file
     writeToTable(tableName, name, about, number, number2, bool1, bool2, date);
   }
-  let tableName = document.getElementById("tables").value;
   generateTable(tableName);
 }
 
@@ -168,10 +191,6 @@ let generateTable = (tableName) => {
   let records = object.elements;
 
   // adding event listener to filter button
-  document.getElementById("filter-submit").addEventListener("click", () => {
-    filteredRecords = filter(records);
-    generateRecords(filteredRecords);
-  });
 
   document.getElementById("search-submit").addEventListener("click", () => {
     searchedRecords = search(records);
@@ -179,9 +198,6 @@ let generateTable = (tableName) => {
   });
 
   // adding event listener to button for filtration clearing
-  document.getElementById("clear-filter").addEventListener("click", () => {
-    generateRecords(records);
-  });
 
   // running function to generate fresh table
   generateRecords(records);
@@ -198,14 +214,57 @@ let generateRecords = (records) => {
 
   console.log(records);
 
-  // if records table 
-  // sorting file records by ID
-  records.sort(dynamicSort("id"));
+  // if records table are longer then 1
+  if (records.length > 1) {
+    // sorting file records by ID
+    records.sort(dynamicSort("id"));
 
-  // running function for every element in records by by "MAP"
-  records.map((element) => {
-    const rowKeys = Object.keys(element);
-    const rowRecords = Object.values(element);
+    // running function for every element in records by by "MAP"
+    records.map((element) => {
+      const rowKeys = Object.keys(element);
+      const rowRecords = Object.values(element);
+
+      // checking if every column exists and adding record to table by automatically generate every field
+      tableSection.innerHTML +=
+        `<div class="cell-row">` +
+        (rowKeys[0]
+          ? `
+      <div class="cell cell-${rowKeys[0]}">${rowRecords[0]}</div>`
+          : "") +
+        (rowKeys[1]
+          ? `
+        <div class="cell cell-${rowKeys[1]}">${rowRecords[1]}</div>`
+          : "") +
+        (rowKeys[2]
+          ? `
+        <div class="cell cell-${rowKeys[2]}">${rowRecords[2]}</div>`
+          : "") +
+        (rowKeys[3]
+          ? `
+        <div class="cell cell-${rowKeys[3]}">${rowRecords[3]}</div>`
+          : "") +
+        (rowKeys[4]
+          ? `
+        <div class="cell cell-${rowKeys[4]}">${rowRecords[4]}</div>`
+          : "") +
+        (rowKeys[5]
+          ? `
+          <div class="cell cell-${rowKeys[5]}">${rowRecords[5]}</div>`
+          : "") +
+        (rowKeys[6]
+          ? `
+            <div class="cell cell-${rowKeys[6]}">${rowRecords[6]}</div>`
+          : "") +
+        (rowKeys[7]
+          ? `
+              <div class="cell cell-${rowKeys[7]}">${rowRecords[7]}</div>`
+          : "") +
+        `<button class="cell delete-record" value="${rowRecords[0]}">X</button>
+      </div>`;
+    });
+  } else {
+    const rowKeys = Object.keys(records);
+    const rowRecords = Object.values(records);
 
     // checking if every column exists and adding record to table by automatically generate every field
     tableSection.innerHTML +=
@@ -244,10 +303,8 @@ let generateRecords = (records) => {
         : "") +
       `<button class="cell delete-record" value="${rowRecords[0]}">X</button>
       </div>`;
-  });
+  }
 };
-
-//! Function to create new record
 
 let writeToTable = (
   tableName,
@@ -311,13 +368,6 @@ let addContent = () => {
   });
 };
 
-let changeTableListener = () => {
-  document.getElementById("tables").addEventListener("change", function () {
-    document.getElementById("table-section").innerHTML = "";
-    generateTable(this.value);
-  });
-};
-
 let deleteButtonHandle = () => {
   let tableName = document.getElementById("tables").value;
 
@@ -346,6 +396,5 @@ function dynamicSort(property) {
 }
 
 generateTable("frameworks");
-changeTableListener();
 addContent();
 deleteButtonHandle();
