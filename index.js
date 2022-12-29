@@ -28,7 +28,7 @@ function randomDataMultiple() {
   for (let y = 0; y < amount; y++) {
     randomData();
   }
-  generateRecords();
+  generateRecords(AllData.elements);
 }
 
 //! Creating new record by manually writing data
@@ -46,13 +46,12 @@ let addContent = () => {
   writeToTable(name, about, number, number2, bool1, bool2, date);
 
   // generating refreshed table with new data
-  generateRecords();
+  generateRecords(AllData.elements);
 };
 
 //! Rendering new table by reading file data
 
-let generateRecords = () => {
-  let records = AllData.elements;
+let generateRecords = (records) => {
   // getting table section div from document
   var tableSection = document.getElementById("table-section");
   // clearing table section from any inner html for empty space to add new records
@@ -69,32 +68,27 @@ let generateRecords = () => {
 
       // checking if every column exists and adding record to table by automatically generate every field
       tableSection.innerHTML += `<div class="cell-row">
-        <div class="cell cell-${rowKeys[0]}">${rowRecords[0]}</div>
-        <div class="cell cell-${rowKeys[1]}">${rowRecords[1]}</div>
-        <div class="cell cell-${rowKeys[2]}">${rowRecords[2]}</div>
-        <div class="cell cell-${rowKeys[3]}">${rowRecords[3]}</div>
-        <div class="cell cell-${rowKeys[4]}">${rowRecords[4]}</div>
-        <div class="cell cell-${rowKeys[5]}">${rowRecords[5]}</div>
-        <div class="cell cell-${rowKeys[6]}">${rowRecords[6]}</div>
-        <div class="cell cell-${rowKeys[7]}">${rowRecords[7]}</div>
-        <button class="cell delete-record" value="${rowRecords[0]}">X</button>
-      </div>`;
+      <div class="cell cell-id">${element.id}</div>
+      <div class="cell cell-name">${element.name}</div>
+      <div class="cell cell-about">${element.about}</div>
+      <div class="cell cell-number">${element.number}</div>
+      <div class="cell cell-number2">${element.number2}</div>
+      <div class="cell cell-bool1">${element.bool1}</div>
+      <div class="cell cell-bool2">${element.bool2}</div>
+      <div class="cell cell-date">${element.date}</div>
+    </div>`;
     });
-  } else {
-    const rowKeys = Object.keys(records);
-    const rowRecords = Object.values(records);
-
-    // checking if every column exists and adding record to table by automatically generate every field
+  } else if (records.length == 1) {
+    console.log(records[0].id);
     tableSection.innerHTML += `<div class="cell-row">
-    <div class="cell cell-${rowKeys[0]}">${rowRecords[0]}</div>
-    <div class="cell cell-${rowKeys[1]}">${rowRecords[1]}</div>
-    <div class="cell cell-${rowKeys[2]}">${rowRecords[2]}</div>
-    <div class="cell cell-${rowKeys[3]}">${rowRecords[3]}</div>
-    <div class="cell cell-${rowKeys[4]}">${rowRecords[4]}</div>
-    <div class="cell cell-${rowKeys[5]}">${rowRecords[5]}</div>
-    <div class="cell cell-${rowKeys[6]}">${rowRecords[6]}</div>
-    <div class="cell cell-${rowKeys[7]}">${rowRecords[7]}</div>
-    <button class="cell delete-record" value="${rowRecords[0]}">X</button>
+    <div class="cell cell-id">${records[0].id}</div>
+    <div class="cell cell-name">${records[0].name}</div>
+    <div class="cell cell-about">${records[0].about}</div>
+    <div class="cell cell-number">${records[0].number}</div>
+    <div class="cell cell-number2">${records[0].number2}</div>
+    <div class="cell cell-bool1">${records[0].bool1}</div>
+    <div class="cell cell-bool2">${records[0].bool2}</div>
+    <div class="cell cell-date">${records[0].date}</div>
   </div>`;
   }
 };
@@ -126,7 +120,6 @@ let writeToTable = (name, about, number, number2, bool1, bool2, date) => {
   };
 
   AllData.elements.push(readyData);
-  console.log(AllData);
 };
 
 //! Saving record list to file
@@ -135,8 +128,32 @@ const saveToFile = () => {
   writeFile(AllData);
 };
 
+//* Search algorithms
 
+//! linear search
+let linearSearch = () => {
+  // let searchSelect = document.getElementById("search-select").value;
+  let searchValue = document.getElementById("search-value").value;
 
+  let resultList = [];
+
+  for (let i = 0; i < AllData.elements.length; i++) {
+    if (AllData.elements[i].id == searchValue) {
+      console.log("jest");
+      resultList.push(AllData.elements[i]);
+    }
+  }
+
+  return resultList;
+};
+
+let binarySearch = () => {};
+
+let chainSearch = () => {};
+
+let inversionSearch = () => {};
+
+//* Search algorithms
 
 //! Dynamically sort array by given property
 
@@ -162,24 +179,32 @@ document
   .getElementById("random-data-multiple-submit")
   .addEventListener("click", randomDataMultiple);
 
-document.getElementById("filter-submit").addEventListener("click", () => {
-  filteredRecords = filter(records);
-  generateRecords(filteredRecords);
-});
-
-document.getElementById("clear-filter").addEventListener("click", () => {
-  const object = readFile(tableName);
-  let records = object.elements;
-  generateRecords(records);
-});
-
 document.getElementById("form-submit").addEventListener("click", addContent);
-
-document.getElementById("search-submit").addEventListener("click", () => {
-  searchedRecords = search(records);
-  generateRecords(searchedRecords);
-});
 
 document.getElementById("save-to-file").addEventListener("click", saveToFile);
 
-generateRecords();
+document
+  .getElementById("linear-search-submit")
+  .addEventListener("click", () => {
+    let records = linearSearch();
+    console.log(records);
+    generateRecords(records);
+  });
+
+document
+  .getElementById("binary-search-submit")
+  .addEventListener("click", binarySearch);
+
+document
+  .getElementById("chain-search-submit")
+  .addEventListener("click", chainSearch);
+
+document
+  .getElementById("inversion-search-submit")
+  .addEventListener("click", inversionSearch);
+
+document
+  .getElementById("clear-search")
+  .addEventListener("click", () => generateRecords(AllData.elements));
+
+generateRecords(AllData.elements);

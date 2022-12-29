@@ -37,28 +37,25 @@
         </div>
         <div id="Search">
           <h4>Choose column to filter by</h4>
-          <select name="filter-select" id="filter-select">
+          <select name="filter-select" id="search-select">
             <option value="null"></option>
+            <option value="id">id</option>
+            <option value="name">Name</option>
+            <option value="about">About</option>
+            <option value="number">number</option>
+            <option value="number2">number2</option>
+            <option value="bool1">bool1</option>
+            <option value="bool2">bool2</option>
+            <option value="date">date</option>
           </select>
-          <select name="filter-select2" id="filter-select2">
-            <option value="null"></option>
-          </select>
-          <label for="filter-value">Filter Value</label>
-          <input type="text" name="filter-value" id="filter-value" />
-          <label for="filter-value2">Filter Value2</label>
-          <input type="text" name="filter-value2" id="filter-value2" />
-          <button id="filter-submit">Filter</button>
-          <button id="clear-filter">Clear Filtration</button>
-        </div>
-        <div id="search">
-          <h4>Choose column to search value</h4>
-          <select name="search-select" id="search-select">
-            <option value="null"></option>
-          </select>
-          <label for="search-value">Search Value</label>
+          <label for="search-value">Filter Value</label>
           <input type="text" name="search-value" id="search-value" />
-          <button id="search-submit">Search</button>
+          <button id="linear-search-submit">Linear Search</button>
+          <button id="binary-search-submit">Binary Search</button>
+          <button id="chain-search-submit">Chain Search</button>
+          <button id="inversion-search-submit">Inversion Search</button>
         </div>
+        <button id="clear-search">Clear Search</button>
       </div>
       <div id="table-section-container">
         <div id="table-section"></div>
