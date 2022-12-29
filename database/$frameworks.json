@@ -1,0 +1,13 @@
+{
+    "columns": [
+     "id",
+     "name",
+     "about",
+     "number",
+     "number2",
+     "bool1",
+     "bool2",
+     "date"
+    ],
+    "elements": []
+}

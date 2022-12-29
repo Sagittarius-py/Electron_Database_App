@@ -1,20 +1,14 @@
 const path = require("path");
 const fs = require("fs");
 
-const readFile = (file) => {
-  let table = path.join(__dirname, `../database/${file}.json`);
+const readFile = () => {
+  let table = path.join(__dirname, `../database/frameworks.json`);
   const data = JSON.parse(fs.readFileSync(table));
   return data;
 };
 
-const writeFile = (file, data) => {
-  let toWrite = data;
-  const fileData = JSON.parse(fs.readFileSync(`./database/${file}.json`));
-  fileData.elements.push(toWrite);
-  fs.writeFileSync(
-    `./database/${file}.json`,
-    JSON.stringify(fileData, "elements", 1)
-  );
+const writeFile = (data) => {
+  fs.writeFileSync(`./database/frameworks.json`, JSON.stringify(data));
 };
 
 const deleteFromFile = (file, data) => {

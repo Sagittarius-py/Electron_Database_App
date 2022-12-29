@@ -1,0 +1,93 @@
+//! Function to filter data by column
+function filter(records) {
+  // reading chosen column
+  let filterColumn = document.getElementById("filter-select").value;
+  let filterColumn2 = document.getElementById("filter-select2").value;
+  // reading value to sort with
+  let filterValue = document.getElementById("filter-value").value;
+  let filterValue2 = document.getElementById("filter-value2").value;
+
+  if (filterColumn == "bool1" || filterColumn == "bool2") {
+    if (filterValue == "true") {
+      filterValue = 1;
+    } else {
+      filterValue = 0;
+    }
+  }
+
+  if (filterColumn2 == "bool1" || filterColumn2 == "bool2") {
+    if (filterValue2 == "true") {
+      filterValue2 = 1;
+    } else {
+      filterValue2 = 0;
+    }
+  }
+
+  // Creating new list with filtered records
+  let filtered = [];
+  records?.map((record) => {
+    console.log(record[filterColumn2] == filterValue2);
+
+    record[filterColumn2] == filterValue2;
+    if (filterColumn2 == "null") {
+      if (record[filterColumn] == filterValue) {
+        filtered.push(record);
+      }
+    } else {
+      if (
+        record[filterColumn] == filterValue &&
+        record[filterColumn2] == filterValue2
+      ) {
+        console.log("cok");
+        filtered.push(record);
+      }
+    }
+  });
+
+  // Returning filtered list
+  return filtered;
+}
+
+function search(recordsData) {
+  let searchColumn = document.getElementById("search-select").value;
+  let searchValue = document.getElementById("search-value").value;
+  let table = [];
+
+  function binarySearch(data, searchValue) {
+    data.sort(dynamicSort(searchColumn));
+    var mid = Math.floor(data.length / 2);
+
+    if (data[mid][searchColumn] == searchValue) {
+      let x = data[mid];
+      return x;
+    } else if (
+      data[mid][searchColumn] < searchValue &&
+      data.length > searchValue
+    ) {
+      return binarySearch(data.splice(mid, data.length), searchValue);
+    } else if (data[mid][searchColumn] > searchValue && data.length > 1) {
+      return binarySearch(data.splice(0, mid), searchValue);
+    } else {
+      return -1;
+    }
+  }
+
+  // //* binary search to lesser equal
+  let result = binarySearch(recordsData, searchValue);
+
+  // //* binary search to lesser lesser
+  // while (searchValue >= 0) {
+  //   console.log(recordsData, searchValue);
+  //   let record = binarySearch(recordsData, searchValue);
+  //   if (record != -1) {
+  //     table.push(record);
+  //   }
+  //   searchValue--;
+  // }
+  // if (table.length > 0) {
+  //   result = table;
+  // }
+  // console.log("bez", result);
+
+  return result;
+}
