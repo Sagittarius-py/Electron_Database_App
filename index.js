@@ -132,13 +132,13 @@ const saveToFile = () => {
 
 //! linear search
 let linearSearch = () => {
-  // let searchSelect = document.getElementById("search-select").value;
+  let searchSelect = document.getElementById("search-select").value;
   let searchValue = document.getElementById("search-value").value;
 
   let resultList = [];
 
   for (let i = 0; i < AllData.elements.length; i++) {
-    if (AllData.elements[i].id == searchValue) {
+    if (AllData.elements[i][searchSelect] == searchValue) {
       console.log("jest");
       resultList.push(AllData.elements[i]);
     }
