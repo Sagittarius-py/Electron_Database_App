@@ -99,6 +99,8 @@ let generateRecords = () => {
   }
 };
 
+//! Add new created element to record list
+
 let writeToTable = (name, about, number, number2, bool1, bool2, date) => {
   // reading previous file data
   const object = AllData.elements;
@@ -127,9 +129,16 @@ let writeToTable = (name, about, number, number2, bool1, bool2, date) => {
   console.log(AllData);
 };
 
+//! Saving record list to file
+
 const saveToFile = () => {
   writeFile(AllData);
 };
+
+
+
+
+//! Dynamically sort array by given property
 
 function dynamicSort(property) {
   var sortOrder = 1;
