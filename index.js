@@ -1,4 +1,4 @@
-const { readFile, writeFile, deleteFromFile } = require("./logic/fileHandle");
+const { readFile, writeFile } = require("./logic/fileHandle");
 
 // Event listener to random data creation
 
@@ -62,10 +62,7 @@ let generateRecords = (records) => {
     records.sort(dynamicSort("id"));
 
     // running function for every element in records by by "MAP"
-    records.map((element) => {
-      const rowKeys = Object.keys(element);
-      const rowRecords = Object.values(element);
-
+    records.slice(0, 500).map((element) => {
       // checking if every column exists and adding record to table by automatically generate every field
       tableSection.innerHTML += `<div class="cell-row">
       <div class="cell cell-id">${element.id}</div>
@@ -79,7 +76,6 @@ let generateRecords = (records) => {
     </div>`;
     });
   } else if (records.length == 1) {
-    console.log(records[0].id);
     tableSection.innerHTML += `<div class="cell-row">
     <div class="cell cell-id">${records[0].id}</div>
     <div class="cell cell-name">${records[0].name}</div>
@@ -139,7 +135,6 @@ let linearSearch = () => {
 
   for (let i = 0; i < AllData.elements.length; i++) {
     if (AllData.elements[i][searchSelect] == searchValue) {
-      console.log("jest");
       resultList.push(AllData.elements[i]);
     }
   }
@@ -147,9 +142,69 @@ let linearSearch = () => {
   return resultList;
 };
 
-let binarySearch = () => {};
+function binarySearch(array, key, value) {
+  let start = 0;
+  let end = array.length - 1;
+  const objects = [];
 
-let chainSearch = () => {};
+  while (start <= end) {
+    const middle = Math.floor((start + end) / 2);
+    const currentValue = array[middle][key];
+
+    console.log(currentValue, start, end);
+
+    if (currentValue == value) {
+      objects.push(array[middle]);
+    }
+
+    const left = binarySearch(array.slice(start, middle), key, value);
+    if (left.length > 0) {
+      return objects.push(...left);
+    }
+    const right = binarySearch(array.slice(middle + 1), key, value);
+    if (right.length > 0) {
+      return objects.push(...right);
+    }
+
+    if (currentValue > value) {
+      end = middle - 1;
+    } else {
+      start = middle + 1;
+    }
+  }
+
+  return objects;
+}
+
+let chainSearch = () => {
+  let key = document.getElementById("search-select").value;
+  let value = document.getElementById("search-value").value;
+  let list = AllData.elements;
+  let keyList = {};
+  let chains = {
+    id: [],
+    name: [],
+    about: [],
+    number: [],
+    number2: [],
+    bool1: [],
+    bool2: [],
+    date: [],
+  };
+
+  for (let i = 0; i < list.length; i++) {}
+
+  let current = list.head;
+  while (current) {
+    if (current.data[key] === value) {
+      result.push(current);
+      current = current.next;
+    }
+    current = current.next;
+  }
+  console.log(result);
+  return result;
+};
 
 let inversionSearch = () => {};
 
@@ -172,7 +227,7 @@ function dynamicSort(property) {
 
 document.getElementById("random-data-submit").addEventListener("click", () => {
   randomData();
-  generateRecords();
+  generateRecords(AllData.elements);
 });
 
 document
@@ -187,21 +242,27 @@ document
   .getElementById("linear-search-submit")
   .addEventListener("click", () => {
     let records = linearSearch();
-    console.log(records);
     generateRecords(records);
   });
 
-document
-  .getElementById("binary-search-submit")
-  .addEventListener("click", binarySearch);
+// document
+//   .getElementById("binary-search-submit")
+//   .addEventListener("click", () => {
+//     let key = document.getElementById("search-select").value;
+//     let value = document.getElementById("search-value").value;
+//     let array = AllData.elements;
+//     let records = binarySearch(array, key, value);
+//     console.log(records);
+//     generateRecords(records);
+//   });
 
-document
-  .getElementById("chain-search-submit")
-  .addEventListener("click", chainSearch);
+// document
+//   .getElementById("chain-search-submit")
+//   .addEventListener("click", chainSearch);
 
-document
-  .getElementById("inversion-search-submit")
-  .addEventListener("click", inversionSearch);
+// document
+//   .getElementById("inversion-search-submit")
+//   .addEventListener("click", inversionSearch);
 
 document
   .getElementById("clear-search")
