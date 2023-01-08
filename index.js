@@ -142,38 +142,36 @@ let linearSearch = () => {
   return resultList;
 };
 
-function binarySearch(array, key, value) {
+function binarySearch(array, key, target) {
   let start = 0;
   let end = array.length - 1;
-  const objects = [];
+  let result = [];
+
+  console.log(key);
 
   while (start <= end) {
-    const middle = Math.floor((start + end) / 2);
-    const currentValue = array[middle][key];
-
-    console.log(currentValue == value);
-
-    if (currentValue == value) {
-      objects.push(array[middle]);
-    }
-
-    const left = binarySearch(array.slice(start, middle), key, value);
-    if (left.length > 0) {
-      return objects.push(...left);
-    }
-    const right = binarySearch(array.slice(middle + 1), key, value);
-    if (right.length > 0) {
-      return objects.push(...right);
-    }
-
-    if (currentValue < value) {
-      end = middle - 1;
+    let mid = Math.floor((start + end) / 2);
+    let midValue = array[mid][key];
+    if (midValue == target) {
+      result.push(array[mid]);
+      let left = mid - 1;
+      let right = mid + 1;
+      while (array[left][key] == target) {
+        result.push(array[left]);
+        left--;
+      }
+      while (array[right][key] == target) {
+        result.push(array[right]);
+        right++;
+      }
+      return result;
+    } else if (midValue < target) {
+      start = mid + 1;
     } else {
-      start = middle + 1;
+      end = mid - 1;
     }
   }
-
-  return objects;
+  return -1;
 }
 
 let chainSearch = () => {
@@ -255,8 +253,17 @@ document
     let key = document.getElementById("search-select").value;
     let value = document.getElementById("search-value").value;
     let array = AllData.elements.sort(dynamicSort(key));
+
+    if (key == "bool1" || key == "bool2") {
+      if (value === "true") {
+        value = true;
+      } else {
+        value = false;
+      }
+    }
+
     let records = binarySearch(array, key, value);
-    console.log(records);
+    console.log(records, "kutas-kozła");
     generateRecords(records);
   });
 
