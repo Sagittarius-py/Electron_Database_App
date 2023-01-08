@@ -62,7 +62,7 @@ let generateRecords = (records) => {
     records.sort(dynamicSort("id"));
 
     // running function for every element in records by by "MAP"
-    records.slice(0, 500).map((element) => {
+    records.slice(0, 1000).map((element) => {
       // checking if every column exists and adding record to table by automatically generate every field
       tableSection.innerHTML += `<div class="cell-row">
       <div class="cell cell-id">${element.id}</div>
@@ -90,17 +90,12 @@ let generateRecords = (records) => {
 };
 
 //! Add new created element to record list
-
+let id = 0;
 let writeToTable = (name, about, number, number2, bool1, bool2, date) => {
   // reading previous file data
   const object = AllData.elements;
 
   // creating id for new record
-  let id = 0;
-  for (let j = 1; j <= object.length; j++) {
-    var item = object.find((item) => item.id === j);
-    if (item == undefined) id = j;
-  }
 
   //creating object with given data
 
@@ -117,12 +112,14 @@ let writeToTable = (name, about, number, number2, bool1, bool2, date) => {
   console.log(readyData);
 
   AllData.elements.push(readyData);
+  id++;
 };
 
 //! Saving record list to file
 
 const saveToFile = () => {
   writeFile(AllData);
+  console.log("zapisane");
 };
 
 //* Search algorithms
@@ -148,8 +145,6 @@ function binarySearch(array, key, target) {
   let end = array.length - 1;
   let result = [];
 
-  console.log(key);
-
   while (start <= end) {
     let mid = Math.floor((start + end) / 2);
     let midValue = array[mid][key];
@@ -157,11 +152,11 @@ function binarySearch(array, key, target) {
       result.push(array[mid]);
       let left = mid - 1;
       let right = mid + 1;
-      while (array[left][key] == target) {
+      while (left >= 0 && array[left][key] == target) {
         result.push(array[left]);
         left--;
       }
-      while (array[right][key] == target) {
+      while (array[right][key] == target && right < array.length) {
         result.push(array[right]);
         right++;
       }
@@ -176,20 +171,75 @@ function binarySearch(array, key, target) {
 }
 
 let chainSearch = (array, key, value) => {
-  let poczatki = {};
-  let konce = {};
-  let lancuchy = [];
+  let starts = {};
+  let ends = {};
+  let chains = [];
 
-  for (let i = 0; i < array.length; i++) {}
-
-  let indeksy = [];
-  if (poczatki.ContainsKey(key)) {
-    for (j = poczatki[key]; lancuchy[j] != -1; j = lancuchy[j]) indekxy.Add(j);
-    indekxy.Add(j);
+  for (let i = 0; i < array.length; i++) {
+    if (!starts.hasOwnProperty(array[i][key])) {
+      // console.log(array[i][key]);
+      // let object = {};
+      starts[array[i][key]] = i;
+      // starts.push(object);
+      ends[array[i][key]] = i;
+      chains.push(-1);
+    } else {
+      chains[ends[array[i][key]]] = i;
+      chains.push(-1);
+      ends[array[i][key]] = i;
+    }
   }
+
+  var startTime = performance.now() * 1000000;
+
+  //
+  let indexes = [];
+  if (starts.hasOwnProperty(value)) {
+    for (j = starts[value]; chains[j] != -1; j = chains[j]) indexes.push(j);
+    indexes.push(j);
+  }
+  //
+
+  var endTime = performance.now() * 1000000;
+  console.log(`Call to chainSearch took ${endTime - startTime} milliseconds`);
+
+  let result = [];
+  indexes.map((index) => {
+    result.push(array[index]);
+  });
+
+  return result;
 };
 
-let inversionSearch = () => {};
+let inversionSearch = (array, key, value) => {
+  let kartoteka = {};
+
+  for (let i = 0; i < array.length; i++) {
+    if (kartoteka.hasOwnProperty(array[i][key])) {
+      kartoteka[array[i][key]].push(i);
+    } else {
+      kartoteka[array[i][key]] = [i];
+    }
+  }
+
+  var startTime = performance.now() * 1000000;
+
+  let result = [];
+  if (kartoteka.hasOwnProperty(value)) {
+    kartoteka[value].map((elem) => {
+      result.push(array[elem]);
+    });
+
+    var endTime = performance.now() * 1000000;
+    console.log(
+      `Call to inversionSearch took ${endTime - startTime} milliseconds`
+    );
+  } else {
+    return [];
+  }
+
+  return result;
+};
 
 //* Search algorithms
 
@@ -224,14 +274,14 @@ document.getElementById("save-to-file").addEventListener("click", saveToFile);
 document
   .getElementById("linear-search-submit")
   .addEventListener("click", () => {
-    var startTime = performance.now();
+    var startTime = performance.now() * 1000000;
     let records = linearSearch();
-    var endTime = performance.now();
+    var endTime = performance.now() * 1000000;
 
     console.log(
       `Call to linearSearch took ${endTime - startTime} milliseconds`
     );
-    generateRecords(records);
+    // generateRecords(records);
   });
 
 document
@@ -248,34 +298,39 @@ document
         value = false;
       }
     }
-    var startTime = performance.now();
+
+    var startTime = performance.now() * 1000000;
     let records = binarySearch(array, key, value);
-    var endTime = performance.now();
+    var endTime = performance.now() * 1000000;
 
     console.log(
       `Call to binarySearch took ${endTime - startTime} milliseconds`
     );
 
-    generateRecords(records);
+    // generateRecords(records);
   });
 
 document.getElementById("chain-search-submit").addEventListener("click", () => {
   let key = document.getElementById("search-select").value;
   let value = document.getElementById("search-value").value;
-  let array = AllData.elements.sort(dynamicSort(key));
+  let array = AllData.elements;
 
-  var startTime = performance.now();
   let records = chainSearch(array, key, value);
-  var endTime = performance.now();
 
-  console.log(`Call to chainSearch took ${endTime - startTime} milliseconds`);
-
-  generateRecords(records);
+  // generateRecords(records);
 });
 
 document
   .getElementById("inversion-search-submit")
-  .addEventListener("click", inversionSearch);
+  .addEventListener("click", () => {
+    let key = document.getElementById("search-select").value;
+    let value = document.getElementById("search-value").value;
+    let array = AllData.elements;
+
+    let records = inversionSearch(array, key, value);
+
+    // generateRecords(records);
+  });
 
 document
   .getElementById("clear-search")
