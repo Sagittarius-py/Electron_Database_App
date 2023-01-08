@@ -151,7 +151,7 @@ function binarySearch(array, key, value) {
     const middle = Math.floor((start + end) / 2);
     const currentValue = array[middle][key];
 
-    console.log(currentValue, start, end);
+    console.log(currentValue == value);
 
     if (currentValue == value) {
       objects.push(array[middle]);
@@ -166,7 +166,7 @@ function binarySearch(array, key, value) {
       return objects.push(...right);
     }
 
-    if (currentValue > value) {
+    if (currentValue < value) {
       end = middle - 1;
     } else {
       start = middle + 1;
@@ -241,20 +241,24 @@ document.getElementById("save-to-file").addEventListener("click", saveToFile);
 document
   .getElementById("linear-search-submit")
   .addEventListener("click", () => {
+    // nowa zmienna data 1
     let records = linearSearch();
+    // nowa zmienna data 2
+
+    // nowa zmienna = data2 - data1
     generateRecords(records);
   });
 
-// document
-//   .getElementById("binary-search-submit")
-//   .addEventListener("click", () => {
-//     let key = document.getElementById("search-select").value;
-//     let value = document.getElementById("search-value").value;
-//     let array = AllData.elements;
-//     let records = binarySearch(array, key, value);
-//     console.log(records);
-//     generateRecords(records);
-//   });
+document
+  .getElementById("binary-search-submit")
+  .addEventListener("click", () => {
+    let key = document.getElementById("search-select").value;
+    let value = document.getElementById("search-value").value;
+    let array = AllData.elements.sort(dynamicSort(key));
+    let records = binarySearch(array, key, value);
+    console.log(records);
+    generateRecords(records);
+  });
 
 // document
 //   .getElementById("chain-search-submit")
