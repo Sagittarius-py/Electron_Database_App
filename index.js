@@ -114,6 +114,7 @@ let writeToTable = (name, about, number, number2, bool1, bool2, date) => {
     bool2: bool2,
     date: date,
   };
+  console.log(readyData);
 
   AllData.elements.push(readyData);
 };
@@ -174,34 +175,18 @@ function binarySearch(array, key, target) {
   return -1;
 }
 
-let chainSearch = () => {
-  let key = document.getElementById("search-select").value;
-  let value = document.getElementById("search-value").value;
-  let list = AllData.elements;
-  let keyList = {};
-  let chains = {
-    id: [],
-    name: [],
-    about: [],
-    number: [],
-    number2: [],
-    bool1: [],
-    bool2: [],
-    date: [],
-  };
+let chainSearch = (array, key, value) => {
+  let poczatki = {};
+  let konce = {};
+  let lancuchy = [];
 
-  for (let i = 0; i < list.length; i++) {}
+  for (let i = 0; i < array.length; i++) {}
 
-  let current = list.head;
-  while (current) {
-    if (current.data[key] === value) {
-      result.push(current);
-      current = current.next;
-    }
-    current = current.next;
+  let indeksy = [];
+  if (poczatki.ContainsKey(key)) {
+    for (j = poczatki[key]; lancuchy[j] != -1; j = lancuchy[j]) indekxy.Add(j);
+    indekxy.Add(j);
   }
-  console.log(result);
-  return result;
 };
 
 let inversionSearch = () => {};
@@ -239,11 +224,13 @@ document.getElementById("save-to-file").addEventListener("click", saveToFile);
 document
   .getElementById("linear-search-submit")
   .addEventListener("click", () => {
-    // nowa zmienna data 1
+    var startTime = performance.now();
     let records = linearSearch();
-    // nowa zmienna data 2
+    var endTime = performance.now();
 
-    // nowa zmienna = data2 - data1
+    console.log(
+      `Call to linearSearch took ${endTime - startTime} milliseconds`
+    );
     generateRecords(records);
   });
 
@@ -261,19 +248,34 @@ document
         value = false;
       }
     }
-
+    var startTime = performance.now();
     let records = binarySearch(array, key, value);
-    console.log(records, "kutas-kozła");
+    var endTime = performance.now();
+
+    console.log(
+      `Call to binarySearch took ${endTime - startTime} milliseconds`
+    );
+
     generateRecords(records);
   });
 
-// document
-//   .getElementById("chain-search-submit")
-//   .addEventListener("click", chainSearch);
+document.getElementById("chain-search-submit").addEventListener("click", () => {
+  let key = document.getElementById("search-select").value;
+  let value = document.getElementById("search-value").value;
+  let array = AllData.elements.sort(dynamicSort(key));
 
-// document
-//   .getElementById("inversion-search-submit")
-//   .addEventListener("click", inversionSearch);
+  var startTime = performance.now();
+  let records = chainSearch(array, key, value);
+  var endTime = performance.now();
+
+  console.log(`Call to chainSearch took ${endTime - startTime} milliseconds`);
+
+  generateRecords(records);
+});
+
+document
+  .getElementById("inversion-search-submit")
+  .addEventListener("click", inversionSearch);
 
 document
   .getElementById("clear-search")
