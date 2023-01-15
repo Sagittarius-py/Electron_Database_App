@@ -6,6 +6,24 @@ let AllData = readFile();
 
 //! Function generating random data
 
+function removeBy3() {
+  let object = AllData.elements;
+
+  var i = object.length;
+
+  while (i--) {
+    (i + 1) % 3 === 0 && object.splice(i, 1);
+  }
+
+  AllData.elements = object;
+  return object;
+}
+
+document.getElementById("delete-button-id").addEventListener("click", () => {
+  let result = removeBy3();
+  generateRecords(result);
+});
+
 function randomData() {
   let name = (Math.random() + 1).toString(36).substring(2);
   let about = (Math.random() + 1).toString(36).substring(8);
@@ -62,7 +80,7 @@ let generateRecords = (records) => {
     records.sort(dynamicSort("id"));
 
     // running function for every element in records by by "MAP"
-    records.slice(0, 1000).map((element) => {
+    records.slice(0, 500).map((element) => {
       // checking if every column exists and adding record to table by automatically generate every field
       tableSection.innerHTML += `<div class="cell-row">
       <div class="cell cell-id">${element.id}</div>
@@ -190,7 +208,9 @@ let chainSearch = (array, key, value) => {
     }
   }
 
-  var startTime = performance.now() * 1000000;
+  console.log(starts);
+
+  console.time("nazwa");
 
   //
   let indexes = [];
@@ -200,8 +220,7 @@ let chainSearch = (array, key, value) => {
   }
   //
 
-  var endTime = performance.now() * 1000000;
-  console.log(`Call to chainSearch took ${endTime - startTime} milliseconds`);
+  console.timeEnd("nazwa");
 
   let result = [];
   indexes.map((index) => {
@@ -210,6 +229,7 @@ let chainSearch = (array, key, value) => {
 
   return result;
 };
+
 
 let inversionSearch = (array, key, value) => {
   let kartoteka = {};
@@ -222,21 +242,17 @@ let inversionSearch = (array, key, value) => {
     }
   }
 
-  var startTime = performance.now() * 1000000;
+  console.time("nazwa");
 
   let result = [];
   if (kartoteka.hasOwnProperty(value)) {
     kartoteka[value].map((elem) => {
       result.push(array[elem]);
     });
-
-    var endTime = performance.now() * 1000000;
-    console.log(
-      `Call to inversionSearch took ${endTime - startTime} milliseconds`
-    );
   } else {
     return [];
   }
+  console.timeEnd("nazwa");
 
   return result;
 };
@@ -274,14 +290,11 @@ document.getElementById("save-to-file").addEventListener("click", saveToFile);
 document
   .getElementById("linear-search-submit")
   .addEventListener("click", () => {
-    var startTime = performance.now() * 1000000;
+    console.time("nazwa");
     let records = linearSearch();
-    var endTime = performance.now() * 1000000;
+    console.timeEnd("nazwa");
 
-    console.log(
-      `Call to linearSearch took ${endTime - startTime} milliseconds`
-    );
-    // generateRecords(records);
+    generateRecords(records);
   });
 
 document
@@ -299,15 +312,11 @@ document
       }
     }
 
-    var startTime = performance.now() * 1000000;
+    console.time("nazwa");
     let records = binarySearch(array, key, value);
-    var endTime = performance.now() * 1000000;
+    console.timeEnd("nazwa");
 
-    console.log(
-      `Call to binarySearch took ${endTime - startTime} milliseconds`
-    );
-
-    // generateRecords(records);
+    generateRecords(records);
   });
 
 document.getElementById("chain-search-submit").addEventListener("click", () => {
@@ -317,7 +326,7 @@ document.getElementById("chain-search-submit").addEventListener("click", () => {
 
   let records = chainSearch(array, key, value);
 
-  // generateRecords(records);
+  generateRecords(records);
 });
 
 document
@@ -329,7 +338,7 @@ document
 
     let records = inversionSearch(array, key, value);
 
-    // generateRecords(records);
+    generateRecords(records);
   });
 
 document
